@@ -181,8 +181,10 @@ function playEffect(sound) {
     if (!audioUnlocked || muted) {
         return;
     }
-    sound.currentTime = 0;
-    sound.play().catch(() => {});
+    // A fresh copy per play lets rapid shots overlap instead of cutting each other off.
+    const copy = sound.cloneNode();
+    copy.volume = sound.volume; // volume isn't copied by cloneNode
+    copy.play().catch(() => {});
 }
 
 // Short descending tone for game over, generated so no extra file is needed.
