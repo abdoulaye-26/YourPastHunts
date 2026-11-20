@@ -4,29 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Death Loop: Your Past Hunts You</title>
+    <meta name="description" content="A time-loop survival game: every time you die, your past self comes back as a ghost clone to hunt you.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='38' fill='%2338bdf8'/><circle cx='50' cy='50' r='38' fill='none' stroke='%23f43f5e' stroke-width='8' stroke-dasharray='40 20'/></svg>">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="game-container">
-        <canvas id="game-canvas" width="800" height="600"></canvas>
-        <div id="start-overlay">
-            <button id="start-button" type="button">Start Game</button>
+    <main id="app">
+        <header id="hud" aria-live="polite">
+            <div class="hud-item"><span class="hud-label">Score</span><span id="score" class="hud-value">0</span></div>
+            <div class="hud-item"><span class="hud-label">Best</span><span id="best" class="hud-value">0</span></div>
+            <div class="hud-item"><span class="hud-label">Level</span><span id="level" class="hud-value">1</span></div>
+            <div class="hud-item"><span class="hud-label">Lives</span><span id="lives" class="hud-value hearts"></span></div>
+            <div class="hud-item hud-timer">
+                <span class="hud-label">Reach the zone</span>
+                <div class="timer-track"><div id="timer-bar" class="timer-bar"></div></div>
+            </div>
+            <div class="hud-buttons">
+                <button id="mute-button" type="button" title="Mute (M)" aria-label="Mute">🔊</button>
+                <button id="pause-button" type="button" title="Pause (P)" disabled>Pause</button>
+            </div>
+        </header>
+
+        <div id="game-container">
+            <canvas id="game-canvas" width="800" height="600" aria-label="Game arena"></canvas>
+
+            <div id="start-overlay" class="overlay">
+                <p class="eyebrow">A time-loop survival game</p>
+                <h1 class="title">DEATH LOOP</h1>
+                <p class="subtitle">Your past hunts you.</p>
+                <ul class="rules">
+                    <li><span class="dot dot-zone"></span>Reach the <strong>green zone</strong> before the timer runs out.</li>
+                    <li><span class="dot dot-hazard"></span>Touch a <strong>red hazard</strong> and you loop back: your past run returns as a ghost.</li>
+                    <li><span class="dot dot-clone"></span><strong>Ghost clones</strong> replay your moves, shoot at you, then hunt you down.</li>
+                </ul>
+                <div class="keys">
+                    <span><kbd>WASD</kbd> / <kbd>↑↓←→</kbd> Move</span>
+                    <span><kbd>Space</kbd> Shoot</span>
+                    <span><kbd>Shift</kbd> Dash</span>
+                    <span><kbd>P</kbd> Pause</span>
+                    <span><kbd>M</kbd> Mute</span>
+                </div>
+                <button id="start-button" class="primary-button" type="button">Start Game</button>
+                <p class="hint">or press <kbd>Enter</kbd></p>
+            </div>
+
+            <div id="pause-overlay" class="overlay" hidden>
+                <h2 class="title small">PAUSED</h2>
+                <p class="hint">Press <kbd>P</kbd> or click Resume</p>
+            </div>
+
+            <div id="game-over-overlay" class="overlay" hidden>
+                <h2 class="game-over-text">GAME OVER</h2>
+                <p id="game-over-reason" class="subtitle"></p>
+                <div class="stats">
+                    <div><span class="stat-value" id="final-score">0</span><span class="stat-label">Score</span></div>
+                    <div><span class="stat-value" id="final-level">1</span><span class="stat-label">Level</span></div>
+                    <div><span class="stat-value" id="final-time">0s</span><span class="stat-label">Survived</span></div>
+                    <div><span class="stat-value" id="final-best">0</span><span class="stat-label">Best</span></div>
+                </div>
+                <p id="new-best" class="new-best" hidden>New best score!</p>
+                <button id="restart-button" class="primary-button" type="button">Play Again</button>
+                <p class="hint">or press <kbd>Enter</kbd></p>
+            </div>
+
+            <div id="glitch-overlay" hidden>
+                <p class="glitch-text">YOUR PAST IS GETTING STRONGER</p>
+            </div>
         </div>
-        <div id="game-over-overlay" style="display: none;">
-            <h1 class="game-over-text">GAME OVER</h1>
-            <button id="restart-button" type="button">Restart Game</button>
-        </div>
-        <div id="ui">
-            <div id="score">Score: 0</div>
-            <div id="loop-count">Loop: 0</div>
-            <div id="time">Time: 10</div>
-            <div id="lives">Lives: 5</div>
-            <button id="pause-button" type="button" disabled>Pause</button>
-            <div id="instructions">WASD: Move, Space: Attack, Shift: Dash</div>
-        <div id="glitch-overlay" style="display: none;">
-            <h1 class="glitch-text">YOUR PAST IS GETTING STRONGER</h1>
-        </div>
-    </div>
+
+        <footer id="footer">
+            Built during an online hackathon (April 2026) by
+            <a href="https://github.com/abdoulaye-26" target="_blank" rel="noopener">Abdoulaye Sène</a>
+            · <a href="https://github.com/abdoulaye-26/YourPastHunts" target="_blank" rel="noopener">Source</a>
+        </footer>
+    </main>
     <script src="game.js"></script>
 </body>
 </html>
