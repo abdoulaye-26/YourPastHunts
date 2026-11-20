@@ -973,16 +973,31 @@ function draw() {
     updateHud();
 }
 
+// Last values written to the DOM, so each frame only touches what changed.
+const hudCache = {};
+
+function setHud(key, value, apply) {
+    if (hudCache[key] !== value) {
+        hudCache[key] = value;
+        apply(value);
+    }
+}
+
 function updateHud() {
-    ui.score.textContent = Math.floor(score ?? 0);
-    ui.best.textContent = bestScore;
-    ui.level.textContent = currentLevel ?? 1;
     const hp = player ? Math.max(0, player.hp) : MAX_LIVES;
-    ui.lives.textContent = '♥'.repeat(hp) + '♡'.repeat(MAX_LIVES - hp);
-    ui.lives.setAttribute('aria-label', `${hp} lives`);
-    const ratio = clamp((timeLeft ?? MAX_TIME) / MAX_TIME, 0, 1);
-    ui.timerBar.style.width = `${ratio * 100}%`;
-    ui.timerBar.classList.toggle('danger', (timeLeft ?? MAX_TIME) <= 4);
+    const time = timeLeft ?? MAX_TIME;
+    // Rounded to 0.1% so the bar still moves smoothly without a write every frame.
+    const timerPercent = Math.round(clamp(time / MAX_TIME, 0, 1) * 1000) / 10;
+
+    setHud('score', Math.floor(score ?? 0), v => { ui.score.textContent = v; });
+    setHud('best', bestScore, v => { ui.best.textContent = v; });
+    setHud('level', currentLevel ?? 1, v => { ui.level.textContent = v; });
+    setHud('hp', hp, v => {
+        ui.lives.textContent = '♥'.repeat(v) + '♡'.repeat(MAX_LIVES - v);
+        ui.lives.setAttribute('aria-label', `${v} lives`);
+    });
+    setHud('timer', timerPercent, v => { ui.timerBar.style.width = `${v}%`; });
+    setHud('danger', time <= 4, v => { ui.timerBar.classList.toggle('danger', v); });
 }
 
 // ---------- Game loop ----------
