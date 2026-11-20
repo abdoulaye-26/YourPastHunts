@@ -3,8 +3,17 @@
 
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
+// Logical size used by all game code; the backing store is scaled for sharp HiDPI rendering.
 const width = canvas.width;
 const height = canvas.height;
+
+function setupCanvasResolution() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // resizing the canvas resets the transform
+}
+setupCanvasResolution();
 
 const ui = {
     container: document.getElementById('game-container'),
@@ -996,3 +1005,11 @@ function gameLoop(currentTime) {
 // Draw the arena behind the start screen.
 resetState();
 draw();
+
+// Browser zoom or moving to another monitor changes the pixel ratio.
+window.addEventListener('resize', () => {
+    setupCanvasResolution();
+    if (gameState !== 'playing') {
+        draw(); // the loop isn't running, so repaint the cleared canvas
+    }
+});
