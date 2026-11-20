@@ -299,6 +299,11 @@ document.addEventListener('keydown', (e) => {
         startGame();
         return;
     }
+    // A held Space (shooting) would otherwise "click" the focused Play Again button.
+    if (e.code === 'Space' && gameState === 'over') {
+        e.preventDefault();
+        return;
+    }
     if (e.code === 'KeyP' || e.code === 'Escape') {
         togglePause();
         return;
@@ -314,6 +319,9 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.addEventListener('keyup', (e) => {
+    if (e.code === 'Space' && gameState === 'over') {
+        e.preventDefault(); // some browsers activate buttons on Space keyup
+    }
     keys[e.code] = false;
 });
 
