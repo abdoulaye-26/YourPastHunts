@@ -64,8 +64,9 @@ const INITIAL_HAZARDS = [
     {x: 700, y: 350, radius: 12, type: 'moving', vx: -50, vy: 0, minX: 500, maxX: 700},
     {x: 250, y: 550, radius: 12, type: 'moving', vx: 0, vy: -30, minY: 350, maxY: 550}
 ];
+// Wall paths keep at least 30px between walls (player is 20px wide) so nobody gets crushed.
 const INITIAL_WALLS = [
-    {x: 350, y: 250, w: 100, h: 20, type: 'moving', vx: 70, vy: 0, minX: 260, maxX: 440},
+    {x: 350, y: 250, w: 100, h: 20, type: 'moving', vx: 70, vy: 0, minX: 300, maxX: 420},
     {x: 250, y: 350, w: 20, h: 100, type: 'moving', vx: 0, vy: -60, minY: 260, maxY: 420},
     {x: 550, y: 150, w: 20, h: 100, type: 'moving', vx: 0, vy: 80, minY: 120, maxY: 260}
 ];
