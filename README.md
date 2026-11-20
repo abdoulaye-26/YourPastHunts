@@ -1,55 +1,45 @@
 # Death Loop: Your Past Hunts You
 
-A fast-paced action survival game based on a time-loop mechanic where you fight against your own past actions as hostile ghost clones.
+A time-loop survival game in the browser. Every time you hit a hazard, your past run comes back as a ghost clone that replays your moves, shoots at you, then hunts you down.
 
-## Gameplay
+## How to play
 
-- Move with WASD or Arrow keys
-- Attack with Space
-- Dash with Shift
-- Survive as long as possible against increasing numbers of clones
-- Each death creates a new clone that replays your past run
-- **Death conditions**: 
-  - Hit by clone bullets (lose 1 HP)
-  - Direct contact with clones (lose 1 HP)
-  - Touching environmental hazards (lose 1 HP)
-  - Player has 2 HP total
-- **Obstacles**: Static and moving hazards, walls that block movement
-- **Respawn System**: Player respawns at alternating safe locations to avoid immediate clone collisions
+Open `index.html` in a modern browser (Chrome, Firefox, Edge) and click **Start Game** or press **Enter**.
 
-## How to Play
+If audio doesn't play when opening the file directly, serve the folder instead:
 
-1. Open `index.html` in a modern web browser (Chrome, Firefox, Edge, etc.)
-2. The game starts immediately
-3. Try to survive as long as possible
-4. Your score increases with time survived
+```
+npx serve .
+```
 
-## Features
+## Controls
 
-- Time-loop mechanic with ghost clones
-- Increasing difficulty with more clones
-- Simple controls: movement, attack, dash
-- Score based on survival time
-- Loop counter
+| Key | Action |
+| --- | --- |
+| WASD / Arrow keys | Move |
+| Space | Shoot |
+| Shift | Dash (short burst, 0.8 s cooldown) |
+| P / Esc | Pause |
+| M | Mute |
+| Enter | Start / play again |
 
-## Technical Details
+## Rules
 
-- Built with vanilla JavaScript and HTML5 Canvas
-- No external dependencies
-- Runs in any modern web browser
+- Reach the **green zone** before the timer (10 s) runs out. Each zone is worth 10 points and resets the timer.
+- You have **5 lives**. You lose one when you:
+  - get hit by a clone's bullet,
+  - touch a clone,
+  - touch a red hazard. This also loops you: your run becomes a ghost clone and you respawn at another corner.
+- After a hit you are invulnerable for 1 second.
+- Shooting a clone destroys it for 5 points.
+- Every 20 seconds the level goes up: more clones are allowed (up to 6), clones hunt faster and moving hazards speed up.
+- The game ends when you run out of lives or time. Your best score is saved in the browser.
 
-## Troubleshooting
+## Project structure
 
-- **Game doesn't load**: Ensure you're opening `index.html` directly in a browser (not just the file in VS Code)
-- **Controls not working**: Make sure the browser window has focus
-- **Performance issues**: The game limits clones to 5 for performance. If still slow, try a different browser
-- **Audio not working**: Audio is not implemented in this version
+- `index.html`: page layout, HUD and overlays
+- `styles.css`: styling
+- `game.js`: game logic and canvas rendering (vanilla JavaScript, no dependencies)
+- `media/`: music and sound effects
 
-## Development
-
-The game consists of:
-- `index.html`: Main HTML file
-- `game.js`: Game logic and rendering
-- `styles.css`: Minimal styling
-
-To modify the game, edit `game.js` for gameplay changes.
+Built during an online hackathon (April 2026).
