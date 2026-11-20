@@ -49,6 +49,7 @@ const INVULNERABLE_TIME = 1; // seconds of protection after a hit
 const LEVEL_DURATION = 20; // seconds per level
 const ZONE_POINTS = 10;
 const CLONE_KILL_POINTS = 5;
+const RECORDING_SECONDS = 10; // how much of the last run a ghost replays
 const MAX_FRAME_TIME = 0.05; // avoids huge jumps after a lag spike
 const BEST_SCORE_KEY = 'deathloop-best-score';
 
@@ -610,7 +611,11 @@ function update(deltaTime) {
     }
 
     // Record this frame so a future clone can replay it
-    player.recording.push({x: player.x, y: player.y, dir: player.dir, attacking: player.attacking});
+    // Only the last few seconds are kept, so a new ghost starts hunting quickly.
+    player.recording.push({x: player.x, y: player.y, dir: player.dir, attacking: player.attacking, t: elapsed});
+    while (player.recording[0].t < elapsed - RECORDING_SECONDS) {
+        player.recording.shift();
+    }
 
     // Clones: replay the recorded run, then hunt the player
     clones.forEach(clone => {

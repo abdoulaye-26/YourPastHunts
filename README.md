@@ -29,7 +29,7 @@ npx serve .
 - You have **5 lives**. You lose one when you:
   - get hit by a clone's bullet,
   - touch a clone,
-  - touch a red hazard. This also loops you: your run becomes a ghost clone and you respawn at another corner.
+  - touch a red hazard. This also loops you: the last 10 seconds of your run become a ghost clone and you respawn at another corner.
 - After a hit you are invulnerable for 1 second.
 - Shooting a clone destroys it for 5 points.
 - Every 20 seconds the level goes up: more clones are allowed (up to 6), clones hunt faster and moving hazards speed up.
