@@ -803,11 +803,13 @@ function update(deltaTime) {
     }
 
     // Particles
+    // 0.92 per frame at 60 fps, scaled so the slowdown is the same at any frame rate.
+    const drag = Math.pow(0.92, deltaTime * 60);
     particles.forEach(p => {
         p.x += p.vx * deltaTime;
         p.y += p.vy * deltaTime;
-        p.vx *= 0.92;
-        p.vy *= 0.92;
+        p.vx *= drag;
+        p.vy *= drag;
         p.life -= deltaTime;
     });
     particles = particles.filter(p => p.life > 0);
