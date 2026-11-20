@@ -1,0 +1,5 @@
+# Store text files with LF in the repo; Git converts per platform on checkout.
+* text=auto eol=lf
+
+*.wav binary
+*.mp3 binary
