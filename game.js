@@ -171,10 +171,10 @@ function saveBestScore(value) {
 // ---------- Audio ----------
 const sounds = {
     background: new Audio('media/deathloop.mp3'),
-    obstacleHit: new Audio('media/obstacle.wav'),
-    cloneHit: new Audio('media/clone.wav'),
-    playerShot: new Audio('media/tir.wav'),
-    cloneShot: new Audio('media/TIR_ENNEMI.wav')
+    obstacleHit: new Audio('media/hit-hazard.wav'),
+    cloneHit: new Audio('media/hit-clone.wav'),
+    playerShot: new Audio('media/shot-player.wav'),
+    cloneShot: new Audio('media/shot-enemy.wav')
 };
 
 sounds.background.loop = true;
