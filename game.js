@@ -745,8 +745,10 @@ function update(deltaTime) {
         }
     }
 
-    // Hazard contact: lose a life, loop back and leave a ghost behind
-    const hitHazard = hazards.find(hazard => distance(hazard, player) < hazard.radius + ENTITY_RADIUS);
+    // Hazard contact: lose a life, loop back and leave a ghost behind.
+    // Respects the post-hit protection, like clones and bullets.
+    const hitHazard = player.invulnerable <= 0 &&
+        hazards.find(hazard => distance(hazard, player) < hazard.radius + ENTITY_RADIUS);
     if (hitHazard) {
         playEffect(sounds.obstacleHit);
         spawnParticles(player.x, player.y, '#b91c1c', 16, 150);
