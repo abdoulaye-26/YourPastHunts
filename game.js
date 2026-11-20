@@ -363,6 +363,76 @@ ui.muteButton.addEventListener('click', () => {
     ui.muteButton.blur();
 });
 
+// ---------- Touch controls ----------
+// The joystick gives a direction; the buttons simply hold the matching keyboard key.
+const touchMove = {x: 0, y: 0};
+const JOYSTICK_DEADZONE = 0.2;
+
+(function setupTouchControls() {
+    const joystick = document.getElementById('joystick');
+    const knob = document.getElementById('joystick-knob');
+    let pointerId = null;
+
+    function moveKnob(e) {
+        const rect = joystick.getBoundingClientRect();
+        const radius = rect.width / 2;
+        let dx = e.clientX - (rect.left + radius);
+        let dy = e.clientY - (rect.top + radius);
+        const length = Math.hypot(dx, dy);
+        if (length > radius) {
+            dx = (dx / length) * radius;
+            dy = (dy / length) * radius;
+        }
+        touchMove.x = dx / radius;
+        touchMove.y = dy / radius;
+        knob.style.transform = `translate(${dx}px, ${dy}px)`;
+    }
+
+    function release(e) {
+        if (e.pointerId !== pointerId) {
+            return;
+        }
+        pointerId = null;
+        touchMove.x = 0;
+        touchMove.y = 0;
+        knob.style.transform = '';
+    }
+
+    joystick.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        pointerId = e.pointerId;
+        joystick.setPointerCapture(pointerId);
+        moveKnob(e);
+    });
+    joystick.addEventListener('pointermove', (e) => {
+        if (e.pointerId === pointerId) {
+            moveKnob(e);
+        }
+    });
+    joystick.addEventListener('pointerup', release);
+    joystick.addEventListener('pointercancel', release);
+
+    function holdKey(buttonId, code) {
+        const button = document.getElementById(buttonId);
+        const press = (e) => {
+            e.preventDefault();
+            keys[code] = true;
+            button.classList.add('pressed');
+        };
+        const lift = () => {
+            keys[code] = false;
+            button.classList.remove('pressed');
+        };
+        button.addEventListener('pointerdown', press);
+        button.addEventListener('pointerup', lift);
+        button.addEventListener('pointercancel', lift);
+        button.addEventListener('pointerleave', lift);
+    }
+
+    holdKey('touch-shoot', 'Space');
+    holdKey('touch-dash', 'ShiftLeft');
+})();
+
 // ---------- Utility functions ----------
 function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -556,6 +626,10 @@ function update(deltaTime) {
     if (keys['KeyS'] || keys['ArrowDown']) moveY += 1;
     if (keys['KeyA'] || keys['ArrowLeft']) moveX -= 1;
     if (keys['KeyD'] || keys['ArrowRight']) moveX += 1;
+    if (Math.hypot(touchMove.x, touchMove.y) > JOYSTICK_DEADZONE) {
+        moveX = touchMove.x;
+        moveY = touchMove.y;
+    }
 
     // Same speed in every direction (diagonals used to be ~40% faster).
     const inputLength = Math.hypot(moveX, moveY);

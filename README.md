@@ -23,6 +23,8 @@ npx serve .
 | M | Mute |
 | Enter | Start / play again |
 
+On touch screens, an on-screen joystick (bottom left) and **Fire** / **Dash** buttons (bottom right) appear automatically.
+
 ## Rules
 
 - Reach the **green zone** before the timer (10 s) runs out. Each zone is worth 10 points and resets the timer.

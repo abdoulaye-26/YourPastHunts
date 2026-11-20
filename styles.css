@@ -365,6 +365,77 @@ kbd {
     100% { transform: translate(0); }
 }
 
+/* ---------- Touch controls ---------- */
+#touch-controls {
+    display: none;
+}
+
+@media (pointer: coarse) {
+    #touch-controls {
+        position: absolute;
+        inset: auto 0 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 12px;
+        z-index: 5; /* below the overlays */
+        pointer-events: none;
+    }
+
+    #joystick,
+    .touch-buttons button {
+        pointer-events: auto;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    #joystick {
+        position: relative;
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background: rgba(56, 189, 248, 0.12);
+        border: 2px solid rgba(56, 189, 248, 0.4);
+    }
+
+    #joystick-knob {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 46px;
+        height: 46px;
+        margin: -23px 0 0 -23px;
+        border-radius: 50%;
+        background: rgba(56, 189, 248, 0.6);
+    }
+
+    .touch-buttons {
+        display: flex;
+        gap: 12px;
+    }
+
+    .touch-buttons button {
+        width: 68px;
+        height: 68px;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 800;
+        color: #fff;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        background: rgba(244, 63, 94, 0.45);
+    }
+
+    #touch-dash {
+        background: rgba(56, 189, 248, 0.4);
+    }
+
+    .touch-buttons button.pressed {
+        filter: brightness(1.5);
+    }
+}
+
 /* ---------- Footer ---------- */
 #footer {
     text-align: center;

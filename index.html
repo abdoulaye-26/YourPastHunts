@@ -28,6 +28,15 @@
         <div id="game-container">
             <canvas id="game-canvas" width="800" height="600" aria-label="Game arena"></canvas>
 
+            <!-- Shown only on touch screens (see styles.css) -->
+            <div id="touch-controls" aria-hidden="true">
+                <div id="joystick"><div id="joystick-knob"></div></div>
+                <div class="touch-buttons">
+                    <button id="touch-dash" type="button" tabindex="-1">Dash</button>
+                    <button id="touch-shoot" type="button" tabindex="-1">Fire</button>
+                </div>
+            </div>
+
             <div id="start-overlay" class="overlay">
                 <p class="eyebrow">A time-loop survival game</p>
                 <h1 class="title">DEATH LOOP</h1>
