@@ -2,9 +2,11 @@
 
 A time-loop survival game in the browser. Every time you hit a hazard, your past run comes back as a ghost clone that replays your moves, shoots at you, then hunts you down.
 
+**Play online: https://abdoulaye-26.github.io/YourPastHunts/**
+
 ## How to play
 
-Open `index.html` in a modern browser (Chrome, Firefox, Edge) and click **Start Game** or press **Enter**.
+Or play locally: open `index.html` in a modern browser (Chrome, Firefox, Edge) and click **Start Game** or press **Enter**.
 
 If audio doesn't play when opening the file directly, serve the folder instead:
 
