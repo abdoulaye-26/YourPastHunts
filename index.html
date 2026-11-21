@@ -28,15 +28,6 @@
         <div id="game-container">
             <canvas id="game-canvas" width="800" height="600" aria-label="Game arena"></canvas>
 
-            <!-- Shown only on touch screens (see styles.css) -->
-            <div id="touch-controls" aria-hidden="true">
-                <div id="joystick"><div id="joystick-knob"></div></div>
-                <div class="touch-buttons">
-                    <button id="touch-dash" type="button" tabindex="-1">Dash</button>
-                    <button id="touch-shoot" type="button" tabindex="-1">Fire</button>
-                </div>
-            </div>
-
             <div id="start-overlay" class="overlay">
                 <p class="eyebrow">A time-loop survival game</p>
                 <h1 class="title">DEATH LOOP</h1>
@@ -78,6 +69,20 @@
 
             <div id="glitch-overlay" hidden>
                 <p class="glitch-text">YOUR PAST IS GETTING STRONGER</p>
+            </div>
+        </div>
+
+        <!-- On-screen controls below the arena, shown only on touch screens (see styles.css) -->
+        <div id="touch-controls" aria-hidden="true">
+            <div id="dpad">
+                <button type="button" tabindex="-1" class="dpad-up" data-key="ArrowUp">▲</button>
+                <button type="button" tabindex="-1" class="dpad-left" data-key="ArrowLeft">◀</button>
+                <button type="button" tabindex="-1" class="dpad-right" data-key="ArrowRight">▶</button>
+                <button type="button" tabindex="-1" class="dpad-down" data-key="ArrowDown">▼</button>
+            </div>
+            <div id="action-buttons">
+                <button id="touch-dash" type="button" tabindex="-1">Dash</button>
+                <button id="touch-shoot" type="button" tabindex="-1">Fire</button>
             </div>
         </div>
 

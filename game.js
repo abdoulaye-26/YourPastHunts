@@ -364,53 +364,64 @@ ui.muteButton.addEventListener('click', () => {
 });
 
 // ---------- Touch controls ----------
-// The joystick gives a direction; the buttons simply hold the matching keyboard key.
-const touchMove = {x: 0, y: 0};
-const JOYSTICK_DEADZONE = 0.2;
+// The on-screen buttons simply hold the matching keyboard keys, so the game logic is unchanged.
+const DPAD_KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
 (function setupTouchControls() {
-    const joystick = document.getElementById('joystick');
-    const knob = document.getElementById('joystick-knob');
-    let pointerId = null;
+    const dpad = document.getElementById('dpad');
+    const dpadButtons = {};
+    dpad.querySelectorAll('button').forEach(button => {
+        dpadButtons[button.dataset.key] = button;
+    });
+    let dpadPointer = null;
 
-    function moveKnob(e) {
-        const rect = joystick.getBoundingClientRect();
-        const radius = rect.width / 2;
-        let dx = e.clientX - (rect.left + radius);
-        let dy = e.clientY - (rect.top + radius);
-        const length = Math.hypot(dx, dy);
-        if (length > radius) {
-            dx = (dx / length) * radius;
-            dy = (dy / length) * radius;
-        }
-        touchMove.x = dx / radius;
-        touchMove.y = dy / radius;
-        knob.style.transform = `translate(${dx}px, ${dy}px)`;
+    function setDpadKeys(active) {
+        DPAD_KEYS.forEach(code => {
+            keys[code] = active.includes(code);
+            dpadButtons[code].classList.toggle('pressed', keys[code]);
+        });
     }
 
-    function release(e) {
-        if (e.pointerId !== pointerId) {
+    // Direction comes from the finger's position relative to the pad centre,
+    // so sliding the thumb works and the corners give diagonals.
+    function readDpad(e) {
+        const rect = dpad.getBoundingClientRect();
+        const dx = e.clientX - (rect.left + rect.width / 2);
+        const dy = e.clientY - (rect.top + rect.height / 2);
+        const deadzone = rect.width * 0.12;
+        const active = [];
+        if (Math.hypot(dx, dy) > deadzone) {
+            const angle = Math.atan2(dy, dx); // 0 = right, PI/2 = down
+            const sector = Math.round(angle / (Math.PI / 4)); // -4..4, eight directions
+            if ([-1, 0, 1].includes(sector)) active.push('ArrowRight');
+            if ([1, 2, 3].includes(sector)) active.push('ArrowDown');
+            if ([3, 4, -4, -3].includes(sector)) active.push('ArrowLeft');
+            if ([-3, -2, -1].includes(sector)) active.push('ArrowUp');
+        }
+        setDpadKeys(active);
+    }
+
+    function releaseDpad(e) {
+        if (e.pointerId !== dpadPointer) {
             return;
         }
-        pointerId = null;
-        touchMove.x = 0;
-        touchMove.y = 0;
-        knob.style.transform = '';
+        dpadPointer = null;
+        setDpadKeys([]);
     }
 
-    joystick.addEventListener('pointerdown', (e) => {
+    dpad.addEventListener('pointerdown', (e) => {
         e.preventDefault();
-        pointerId = e.pointerId;
-        joystick.setPointerCapture(pointerId);
-        moveKnob(e);
+        dpadPointer = e.pointerId;
+        dpad.setPointerCapture(dpadPointer);
+        readDpad(e);
     });
-    joystick.addEventListener('pointermove', (e) => {
-        if (e.pointerId === pointerId) {
-            moveKnob(e);
+    dpad.addEventListener('pointermove', (e) => {
+        if (e.pointerId === dpadPointer) {
+            readDpad(e);
         }
     });
-    joystick.addEventListener('pointerup', release);
-    joystick.addEventListener('pointercancel', release);
+    dpad.addEventListener('pointerup', releaseDpad);
+    dpad.addEventListener('pointercancel', releaseDpad);
 
     function holdKey(buttonId, code) {
         const button = document.getElementById(buttonId);
@@ -431,6 +442,9 @@ const JOYSTICK_DEADZONE = 0.2;
 
     holdKey('touch-shoot', 'Space');
     holdKey('touch-dash', 'ShiftLeft');
+
+    // A long press would otherwise open the browser's context menu.
+    document.getElementById('touch-controls').addEventListener('contextmenu', e => e.preventDefault());
 })();
 
 // ---------- Utility functions ----------
@@ -626,10 +640,6 @@ function update(deltaTime) {
     if (keys['KeyS'] || keys['ArrowDown']) moveY += 1;
     if (keys['KeyA'] || keys['ArrowLeft']) moveX -= 1;
     if (keys['KeyD'] || keys['ArrowRight']) moveX += 1;
-    if (Math.hypot(touchMove.x, touchMove.y) > JOYSTICK_DEADZONE) {
-        moveX = touchMove.x;
-        moveY = touchMove.y;
-    }
 
     // Same speed in every direction (diagonals used to be ~40% faster).
     const inputLength = Math.hypot(moveX, moveY);

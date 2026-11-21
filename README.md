@@ -25,7 +25,7 @@ npx serve .
 | M | Mute |
 | Enter | Start / play again |
 
-On touch screens, an on-screen joystick (bottom left) and **Fire** / **Dash** buttons (bottom right) appear automatically.
+On touch screens, a control bar appears below the arena: a direction pad (slide your thumb for diagonals) plus **Dash** and **Fire** buttons. With the phone held sideways, they sit on either side of the arena.
 
 ## Rules
 
